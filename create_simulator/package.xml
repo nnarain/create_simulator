@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>create_simulator</name>
+  <version>0.0.0</version>
+  <description>Gazebo simulator for the iRobot Create platform</description>
+
+  <maintainer email="nnaraindev@gmail.com">Natesh Narain</maintainer>
+  <author email="nnaraindev@gmail.com">Natesh Narain</author>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>create_gazebo</exec_depend>
+
+  <export>
+  </export>
+</package>
