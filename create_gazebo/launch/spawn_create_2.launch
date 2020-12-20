@@ -3,4 +3,7 @@
   <!-- Setup robot description and spawn into Gazebo sim -->
   <include file="$(find create_description)/launch/create_2.launch" />
   <node name="spawn_create2" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" />
+
+  <!-- Sim nodes to convert gazebo sensors into create_msgs -->
+  <node name="sim_create_bumper" pkg="create_gazebo" type="bumper_node" />
 </launch>
