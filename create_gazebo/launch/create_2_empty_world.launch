@@ -4,6 +4,7 @@
   <arg name="gui" default="true" />
   <arg name="headless" default="false" />
   <arg name="world_name" default="worlds/empty.world" />
+  <arg name="verbose" default="false" />
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="gui" value="$(arg gui)" />
@@ -11,6 +12,7 @@
     <arg name="headless" value="$(arg headless)" />
     <arg name="world_name" value="$(arg world_name)" />
     <arg name="debug" value="0" />
+    <arg name="verbose" value="$(arg verbose)" />
   </include>
 
   <include file="$(find create_gazebo)/launch/spawn_create_2.launch" />

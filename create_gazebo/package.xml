@@ -13,11 +13,14 @@
 
   <depend>roscpp</depend>
   <depend>gazebo_msgs</depend>
+  <depend>gazebo_ros</depend>
+  <depend>gazebo_plugins</depend>
   <depend>create_msgs</depend>
   <depend>tf</depend>
 
   <exec_depend>create_description</exec_depend>
 
   <export>
+    <gazebo_ros plugin_path="${prefix}/lib" />
   </export>
 </package>
