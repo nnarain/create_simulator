@@ -1,4 +1,4 @@
-#include "create_gazebo/plugins/cliff_plugin.hpp"
+#include "create_gazebo/plugins/cliff_sensor_plugin.hpp"
 
 #include <gazebo_plugins/gazebo_ros_utils.h>
 

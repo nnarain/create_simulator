@@ -46,19 +46,19 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 # TODO: Bumper plugin
 
 # Cliff sensor plugin
-add_library(create_cliff_plugin
-    src/plugins/cliff_plugin.cpp
+add_library(create_cliff_sensor_plugin
+    src/plugins/cliff_sensor_plugin.cpp
 )
-target_include_directories(create_cliff_plugin
+target_include_directories(create_cliff_sensor_plugin
     PUBLIC
         include/
         ${catkin_INCLUDE_DIRS}
         ${GAZEBO_INCLUDE_DIRS}
 )
-target_link_libraries(create_cliff_plugin
+target_link_libraries(create_cliff_sensor_plugin
     ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} RayPlugin
 )
-add_dependencies(create_cliff_plugin ${catkin_EXPORTED_TARGETS})
+add_dependencies(create_cliff_sensor_plugin ${catkin_EXPORTED_TARGETS})
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Installs
@@ -69,7 +69,7 @@ install(TARGETS bumper_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(TARGETS create_cliff_plugin
+install(TARGETS create_cliff_sensor_plugin
     DESTINATION         ${CATKIN_PACKAGE_BIN_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
