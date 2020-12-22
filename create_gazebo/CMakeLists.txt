@@ -23,19 +23,8 @@ catkin_package(
         gazebo_ros
         tf
     LIBRARIES
-        create_cliff_plugin
-)
-
-add_executable(bumper_node
-    src/bumper_node.cpp
-)
-target_include_directories(bumper_node
-    PRIVATE
-        include/
-        ${catkin_INCLUDE_DIRS}
-)
-target_link_libraries(bumper_node
-    ${catkin_LIBRARIES}
+        create_bumper_model_plugin
+        create_cliff_sensor_plugin
 )
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -43,7 +32,20 @@ target_link_libraries(bumper_node
 #-----------------------------------------------------------------------------------------------------------------------
 link_directories(${GAZEBO_LIBRARY_DIRS})
 
-# TODO: Bumper plugin
+# Bumper plugin
+add_library(create_bumper_model_plugin
+    src/plugins/bumper_model_plugin.cpp
+)
+target_include_directories(create_bumper_model_plugin
+    PUBLIC
+        include/
+        ${catkin_INCLUDE_DIRS}
+        ${GAZEBO_INCLUDE_DIRS}
+)
+target_link_libraries(create_bumper_model_plugin
+    ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} RayPlugin
+)
+add_dependencies(create_bumper_model_plugin ${catkin_EXPORTED_TARGETS})
 
 # Cliff sensor plugin
 add_library(create_cliff_sensor_plugin
@@ -78,12 +80,6 @@ add_dependencies(create_cliff_model_plugin ${catkin_EXPORTED_TARGETS})
 #-----------------------------------------------------------------------------------------------------------------------
 # Installs
 #-----------------------------------------------------------------------------------------------------------------------
-install(TARGETS bumper_node
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
 install(
     TARGETS
         create_cliff_sensor_plugin

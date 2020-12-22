@@ -4,6 +4,8 @@
 // @author Natesh Narain <nnaraindev@gmail.com>
 // @date Dec 21 2020
 //
+#ifndef CREATE_GAZEBO_CLIFF_MODEL_PLUGIN_HPP
+#define CREATE_GAZEBO_CLIFF_MODEL_PLUGIN_HPP
 
 #include <gazebo/common/Plugin.hh>
 #include <ros/ros.h>
@@ -55,3 +57,5 @@ private:
     bool rightfront_state_;
 };
 }
+
+#endif // CREATE_GAZEBO_CLIFF_MODEL_PLUGIN_HPP

@@ -4,8 +4,8 @@
 // @author Natesh Narain <nnaraindev@gmail.com>
 // @date Dec 21 2020
 //
-#ifndef CREATE_GAZEBO_CLIFF_PLUGIN_HPP
-#define CREATE_GAZEBO_CLIFF_PLUGIN_HPP
+#ifndef CREATE_GAZEBO_CLIFF_SENSOR_PLUGIN_HPP
+#define CREATE_GAZEBO_CLIFF_SENSOR_PLUGIN_HPP
 
 #include <gazebo/plugins/RayPlugin.hh>
 #include <gazebo/transport/transport.hh>
@@ -62,4 +62,4 @@ private:
 };
 }
 
-#endif // CREATE_GAZEBO_CLIFF_PLUGIN_HPP
+#endif // CREATE_GAZEBO_CLIFF_SENSOR_PLUGIN_HPP
