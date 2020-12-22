@@ -60,6 +60,21 @@ target_link_libraries(create_cliff_sensor_plugin
 )
 add_dependencies(create_cliff_sensor_plugin ${catkin_EXPORTED_TARGETS})
 
+# Cliff Model Plugin
+add_library(create_cliff_model_plugin
+    src/plugins/cliff_model_plugin.cpp
+)
+target_include_directories(create_cliff_model_plugin
+    PUBLIC
+        include/
+        ${catkin_INCLUDE_DIRS}
+        ${GAZEBO_INCLUDE_DIRS}
+)
+target_link_libraries(create_cliff_model_plugin
+    ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES}
+)
+add_dependencies(create_cliff_model_plugin ${catkin_EXPORTED_TARGETS})
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Installs
 #-----------------------------------------------------------------------------------------------------------------------
@@ -69,7 +84,10 @@ install(TARGETS bumper_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(TARGETS create_cliff_sensor_plugin
+install(
+    TARGETS
+        create_cliff_sensor_plugin
+        create_cliff_model_plugin
     DESTINATION         ${CATKIN_PACKAGE_BIN_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
