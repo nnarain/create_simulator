@@ -16,6 +16,7 @@
   <depend>gazebo_ros</depend>
   <depend>gazebo_plugins</depend>
   <depend>create_msgs</depend>
+  <depend>create_navigation</depend>
   <depend>tf</depend>
 
   <exec_depend>create_description</exec_depend>
