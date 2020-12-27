@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find create_gazebo)/launch/gazebo.launch">
+        <arg name="world" value="worlds/empty.world" />
+    </include>
+</launch>

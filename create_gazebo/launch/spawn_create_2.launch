@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="nav" default="false" />
+
   <!-- Setup robot description and spawn into Gazebo sim -->
   <include file="$(find create_description)/launch/create_2.launch" />
   <node name="spawn_create2" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" />
+
+  <!-- Bring up nav stack -->
+  <group if="$(arg nav)">
+    <include file="$(find create_navigation)/launch/navigation.launch" />
+  </group>
 </launch>

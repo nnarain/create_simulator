@@ -1,0 +1,7 @@
+<launch>
+    <arg name="nav" default="true" />
+    <include file="$(find create_gazebo)/launch/gazebo.launch">
+        <arg name="world" value="$(find create_gazebo)/worlds/maze.world" />
+        <arg name="nav" value="$(arg nav)" />
+    </include>
+</launch>
