@@ -11,7 +11,10 @@
 
 #include <ros/ros.h>
 #include <create_msgs/Bumper.h>
+#include <nav_msgs/Odometry.h>
 #include <gazebo_msgs/ContactsState.h>
+
+#include <tf/tf.h>
 
 namespace gazebo
 {
@@ -33,6 +36,11 @@ private:
     void sensorCallback(const gazebo_msgs::ContactsStateConstPtr& msg);
 
     /**
+     * Odom callback
+    */
+    void odomCallback(const nav_msgs::OdometryConstPtr& msg);
+
+    /**
      * Update bumper publisher
     */
     void bumperPubTimerCallback(const ros::TimerEvent&);
@@ -43,9 +51,14 @@ private:
     ros::Timer bumper_pub_timer_;
     // Subscriber for contact states
     ros::Subscriber contact_sub_;
+    // Odom to get robot heading
+    ros::Subscriber odom_sub_;
 
     // Contact parameters
     double front_contact_threshold_;
+
+    // Robot heading
+    tf::Vector3 heading_;
 };
 }
 
