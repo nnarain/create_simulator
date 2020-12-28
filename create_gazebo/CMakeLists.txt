@@ -5,10 +5,11 @@ add_compile_options(-std=c++17 -Wall -Wextra)
 
 find_package(catkin REQUIRED COMPONENTS
     create_msgs
-    roscpp
     gazebo_msgs
     gazebo_plugins
     gazebo_ros
+    nav_msgs
+    roscpp
     tf
 )
 
@@ -17,10 +18,11 @@ find_package(gazebo REQUIRED)
 catkin_package(
     CATKIN_DEPENDS
         create_msgs
-        roscpp
         gazebo_msgs
         gazebo_plugins
         gazebo_ros
+        nav_msgs
+        roscpp
         tf
     LIBRARIES
         create_bumper_model_plugin
