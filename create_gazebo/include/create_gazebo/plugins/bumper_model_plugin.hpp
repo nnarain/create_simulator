@@ -13,6 +13,7 @@
 #include <create_msgs/Bumper.h>
 #include <nav_msgs/Odometry.h>
 #include <gazebo_msgs/ContactsState.h>
+#include <std_msgs/UInt16.h>
 
 #include <tf/tf.h>
 
@@ -41,6 +42,11 @@ private:
     void odomCallback(const nav_msgs::OdometryConstPtr& msg);
 
     /**
+     * Light sensor callback
+    */
+    void lightSensorCallback(const std_msgs::UInt16ConstPtr& msg, uint16_t& field);
+
+    /**
      * Update bumper publisher
     */
     void bumperPubTimerCallback(const ros::TimerEvent&);
@@ -53,6 +59,8 @@ private:
     ros::Subscriber contact_sub_;
     // Odom to get robot heading
     ros::Subscriber odom_sub_;
+    // Light sensors
+    ros::Subscriber light_subs_[6];
 
     // Contact parameters
     double front_contact_threshold_;
