@@ -63,6 +63,28 @@ void CreateBumperModelRos::Load(physics::ModelPtr, sdf::ElementPtr sdf)
 
     // Odometry callback
     odom_sub_ = nh.subscribe(odom_topic, 10, &CreateBumperModelRos::odomCallback, this);
+
+    // Light sensor subscribers
+    using namespace boost::placeholders;
+
+    light_subs_[0] = nh.subscribe<std_msgs::UInt16>("/sim/light_left", 1,
+                                                    boost::bind(&CreateBumperModelRos::lightSensorCallback, this,
+                                                    _1, boost::ref(bumper_msg_.light_signal_left)));
+    light_subs_[1] = nh.subscribe<std_msgs::UInt16>("/sim/light_frontleft", 1,
+                                                    boost::bind(&CreateBumperModelRos::lightSensorCallback, this,
+                                                    _1, boost::ref(bumper_msg_.light_signal_front_left)));
+    light_subs_[2] = nh.subscribe<std_msgs::UInt16>("/sim/light_centerleft", 1,
+                                                    boost::bind(&CreateBumperModelRos::lightSensorCallback, this,
+                                                    _1, boost::ref(bumper_msg_.light_signal_center_left)));
+    light_subs_[3] = nh.subscribe<std_msgs::UInt16>("/sim/light_centerright", 1,
+                                                    boost::bind(&CreateBumperModelRos::lightSensorCallback, this,
+                                                    _1, boost::ref(bumper_msg_.light_signal_center_right)));
+    light_subs_[4] = nh.subscribe<std_msgs::UInt16>("/sim/light_frontright", 1,
+                                                    boost::bind(&CreateBumperModelRos::lightSensorCallback, this,
+                                                    _1, boost::ref(bumper_msg_.light_signal_front_right)));
+    light_subs_[5] = nh.subscribe<std_msgs::UInt16>("/sim/light_right", 1,
+                                                    boost::bind(&CreateBumperModelRos::lightSensorCallback, this,
+                                                    _1, boost::ref(bumper_msg_.light_signal_right)));
 }
 
 void CreateBumperModelRos::sensorCallback(const gazebo_msgs::ContactsStateConstPtr& msg)
@@ -76,7 +98,6 @@ void CreateBumperModelRos::sensorCallback(const gazebo_msgs::ContactsStateConstP
         {
             tf::Vector3 n;
             tf::vector3MsgToTF(normal, n);
-            // ROS_INFO("contact: (%0.2f, %0.2f)", n.x(), n.y());
 
             // Contact points are on a cylindrical collision body.
             // Therefore, the contact normals are all pointed inwards to the robot's center (base_link origin)
@@ -117,8 +138,11 @@ void CreateBumperModelRos::odomCallback(const nav_msgs::OdometryConstPtr& msg)
 
     const tf::Vector3 d{1, 0, 0};
     heading_ = tf::quatRotate(r, d);
+}
 
-    // ROS_INFO("heading: [%0.2f, %0.2f]", heading_.x(), heading_.y());
+void CreateBumperModelRos::lightSensorCallback(const std_msgs::UInt16ConstPtr& msg, uint16_t& field)
+{
+    field = msg->data;
 }
 
 void CreateBumperModelRos::bumperPubTimerCallback(const ros::TimerEvent&)

@@ -1,7 +1,9 @@
 <launch>
     <arg name="nav" default="true" />
+    <arg name="verbose" default="false" />
     <include file="$(find create_gazebo)/launch/gazebo.launch">
         <arg name="world" value="$(find create_gazebo)/worlds/maze.world" />
         <arg name="nav" value="$(arg nav)" />
+        <arg name="verbose" value="$(arg verbose)" />
     </include>
 </launch>

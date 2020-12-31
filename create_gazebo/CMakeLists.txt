@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
     gazebo_ros
     nav_msgs
     roscpp
+    std_msgs
     tf
 )
 
@@ -23,6 +24,7 @@ catkin_package(
         gazebo_ros
         nav_msgs
         roscpp
+        std_msgs
         tf
     LIBRARIES
         create_bumper_model_plugin
@@ -79,13 +81,30 @@ target_link_libraries(create_cliff_model_plugin
 )
 add_dependencies(create_cliff_model_plugin ${catkin_EXPORTED_TARGETS})
 
+# Light sensor plugin
+add_library(create_light_sensor_plugin
+    src/plugins/light_sensor_plugin.cpp
+)
+target_include_directories(create_light_sensor_plugin
+    PUBLIC
+        include/
+        ${catkin_INCLUDE_DIRS}
+        ${GAZEBO_INCLUDE_DIRS}
+)
+target_link_libraries(create_light_sensor_plugin
+    ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} RayPlugin
+)
+add_dependencies(create_light_sensor_plugin ${catkin_EXPORTED_TARGETS})
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Installs
 #-----------------------------------------------------------------------------------------------------------------------
 install(
     TARGETS
+        create_bumper_model_plugin
         create_cliff_sensor_plugin
         create_cliff_model_plugin
+        create_light_sensor_plugin
     DESTINATION         ${CATKIN_PACKAGE_BIN_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
