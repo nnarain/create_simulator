@@ -1,9 +1,15 @@
 <launch>
+    <arg name="map_file" default="$(find create_gazebo)/maps/maze/maze.bt" />
+
     <arg name="nav" default="true" />
+    <arg name="nav_mode" default="free" />
     <arg name="verbose" default="false" />
+
     <include file="$(find create_gazebo)/launch/gazebo.launch">
         <arg name="world" value="$(find create_gazebo)/worlds/maze.world" />
         <arg name="nav" value="$(arg nav)" />
+        <arg name="nav_mode" value="$(arg nav_mode)" />
+        <arg name="map_file" value="$(arg map_file)" />
         <arg name="verbose" value="$(arg verbose)" />
     </include>
 </launch>

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="nav" default="false" />
+  <arg name="nav_mode" default="free" />
+  <arg name="map_file" default="" />
 
   <!-- Setup robot description and spawn into Gazebo sim -->
   <include file="$(find create_description)/launch/create_2.launch" />
@@ -8,6 +10,9 @@
 
   <!-- Bring up nav stack -->
   <group if="$(arg nav)">
-    <include file="$(find create_navigation)/launch/navigation.launch" />
+    <include file="$(find create_navigation)/launch/navigation.launch">
+      <arg name="nav_mode" value="$(arg nav_mode)" />
+      <arg name="map_file" value="$(arg map_file)" />
+    </include>
   </group>
 </launch>
