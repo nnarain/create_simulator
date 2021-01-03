@@ -1,5 +1,12 @@
 <launch>
+    <arg name="nav" default="true" />
+    <arg name="nav_mode" default="free" />
+    <arg name="verbose" default="false" />
+
     <include file="$(find create_gazebo)/launch/gazebo.launch">
         <arg name="world" value="worlds/empty.world" />
+        <arg name="nav" value="$(arg nav)" />
+        <arg name="nav_mode" value="$(arg nav_mode)" />
+        <arg name="verbose" value="$(arg verbose)" />
     </include>
 </launch>
