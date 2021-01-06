@@ -1,6 +1,6 @@
 <launch>
     <arg name="nav" default="true" />
-    <arg name="nav_mode" default="free" />
+    <arg name="nav_mode" default="odom" />
     <arg name="verbose" default="false" />
 
     <include file="$(find create_gazebo)/launch/gazebo.launch">
