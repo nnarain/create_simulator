@@ -6,7 +6,7 @@
   <arg name="world" default="worlds/empty.world" />
   <arg name="verbose" default="false" />
   <arg name="nav" default="false" />
-  <arg name="nav_mode" default="free" />
+  <arg name="nav_mode" default="odom" />
   <arg name="map_file" default="" />
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">

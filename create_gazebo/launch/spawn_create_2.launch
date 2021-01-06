@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="nav" default="false" />
-  <arg name="nav_mode" default="free" />
+  <arg name="nav_mode" default="odom" />
   <arg name="map_file" default="" />
 
   <!-- Setup robot description and spawn into Gazebo sim -->
