@@ -1,32 +1,38 @@
-#include "create_gazebo/plugins/light_sensor_plugin.hpp"
+#include <gazebo/plugins/RayPlugin.hh>
+#include <gazebo/transport/transport.hh>
+#include <gazebo_ros/node.hpp>
 
-#include <gazebo_plugins/gazebo_ros_utils.h>
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/u_int16.hpp>
 
 #include <thread>
 #include <functional>
 #include <cmath>
+#include <memory>
 
 static constexpr uint16_t MAX_LIGHT_VALUE = 4096;
 
-namespace gazebo
+namespace create_gazebo
 {
-    GZ_REGISTER_SENSOR_PLUGIN(CreateLightRos)
-
-    CreateLightRos::CreateLightRos()
+class CreateLightRos : public gazebo::RayPlugin
+{
+public:
+    CreateLightRos()
     {
     }
 
-    void CreateLightRos::Load(sensors::SensorPtr parent, sdf::ElementPtr sdf)
+    void Load(gazebo::sensors::SensorPtr parent, sdf::ElementPtr sdf)
     {
-        ROS_INFO_STREAM_NAMED("light", "loading light plugin");
         RayPlugin::Load(parent, sdf);
 
-        parent_ = std::dynamic_pointer_cast<sensors::RaySensor>(parent);
+        parent_ = std::dynamic_pointer_cast<gazebo::sensors::RaySensor>(parent);
 
         if (!parent_)
         {
             gzthrow("Parent sensor must be a Ray sensor");
         }
+
+        ros_node_ = gazebo_ros::Node::Get(sdf);
 
         std::string topic_name = "/light";
         if (sdf->HasElement("topicName"))
@@ -34,57 +40,38 @@ namespace gazebo
             topic_name = sdf->Get<std::string>("topicName");
         }
 
-        // Setup ROS
-        if (!ros::isInitialized())
-        {
-            ROS_FATAL_STREAM_NAMED("light", "ROS is not initialized, cannot load plugin");
-            return;
-        }
+        pub_ = ros_node_->create_publisher<std_msgs::msg::UInt16>(topic_name, rclcpp::SensorDataQoS());
 
         const auto world_name = parent_->WorldName();
-        const auto robot_namespace = GetRobotNamespace(parent_, sdf, "light");
 
         // Gazebo node is used to subscribe to gazebo laser scan messages
-        node_ = transport::NodePtr{new transport::Node{}};
+        node_ = gazebo::transport::NodePtr{new gazebo::transport::Node{}};
         node_->Init(world_name);
 
-        pmq_.startServiceThread();
-
-        ros::NodeHandle nh{robot_namespace};
-
-        ros::AdvertiseOptions opts = ros::AdvertiseOptions::create<std_msgs::UInt16>(
-            topic_name, 1,
-            std::bind(&CreateLightRos::onConnect, this),
-            std::bind(&CreateLightRos::onDisconnect, this),
-            ros::VoidPtr{}, nullptr
-        );
-
-        pub_ = nh.advertise(opts);
-        pub_queue_ = pmq_.addPub<std_msgs::UInt16>();
+        scan_sub_ = node_->Subscribe(parent_->Topic(), &CreateLightRos::onScan, this);
 
         parent_->SetActive(false);
-
-        ROS_INFO_STREAM_NAMED("light", "Starting light plugin: " << robot_namespace);
     }
 
-    void CreateLightRos::onConnect()
+private:
+    void onConnect()
     {
-        if (!scan_sub_)
-        {
-            ROS_INFO_STREAM_NAMED("light", "Subscring to scan messages");
-            scan_sub_ = node_->Subscribe(parent_->Topic(), &CreateLightRos::onScan, this);
-        }
+        // if (!scan_sub_)
+        // {
+        //     ROS_INFO_STREAM_NAMED("light", "Subscring to scan messages");
+        //     scan_sub_ = node_->Subscribe(parent_->Topic(), &CreateLightRos::onScan, this);
+        // }
     }
 
-    void CreateLightRos::onDisconnect()
+    void onDisconnect()
     {
-        ROS_INFO_STREAM_NAMED("light", "Disconnecting from scan messages");
-        scan_sub_.reset();
+        // ROS_INFO_STREAM_NAMED("light", "Disconnecting from scan messages");
+        // scan_sub_.reset();
     }
 
-    void CreateLightRos::onScan(const ConstLaserScanStampedPtr& laser)
+    void onScan(const ConstLaserScanStampedPtr& laser)
     {
-        std_msgs::UInt16 msg;
+        std_msgs::msg::UInt16 msg;
 
         const auto distance = laser->scan().ranges(0);
 
@@ -99,6 +86,21 @@ namespace gazebo
             msg.data = MAX_LIGHT_VALUE * (1.0 - ratio);
         }
 
-        pub_queue_->push(msg, pub_);
+        pub_->publish(msg);
     }
+
+    // Parent sensor
+    gazebo::sensors::RaySensorPtr parent_;
+
+    gazebo_ros::Node::SharedPtr ros_node_;
+
+    // ROS publisher
+    rclcpp::Publisher<std_msgs::msg::UInt16>::SharedPtr pub_;
+
+    // Gazebo subscriber
+    gazebo::transport::NodePtr node_;
+    gazebo::transport::SubscriberPtr scan_sub_;
+};
+
+    GZ_REGISTER_SENSOR_PLUGIN(CreateLightRos)
 }
